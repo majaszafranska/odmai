@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>odmai.pl</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <nav>
+        <a href="#" onclick="showSection('dev')" data-i18n="nav.dev">Dev</a>
+        <a href="#" onclick="showSection('bio')" data-i18n="nav.bio">Bio</a>
+        <a href="#" onclick="showSection('cv')" data-i18n="nav.cv">CV</a>
+        <a href="#" onclick="showSection('projekty')" data-i18n="nav.projects">Projekty</a>
+        <a href="#" onclick="showSection('kontakt')" data-i18n="nav.contact">Kontakt</a>
+      </nav>
+    </div>
+    <div>
+      <button class="dark-toggle" onclick="toggleTheme()">🌓</button>
+      <select class="lang-switch" onchange="switchLang(this.value)">
+        <option value="pl">PL</option>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <section id="dev" class="active">
+      <div class="tool-section">
+        <h2 data-i18n="dev.passwordGenerator">Generator haseł</h2>
+        <label for="length" data-i18n="dev.length">Długość hasła:</label>
+        <input type="range" id="length" min="8" max="32" value="16" oninput="updateLengthLabel(this.value)">
+        <span id="length-value">16</span>
+        <div>
+          <label><input type="checkbox" id="include-uppercase" checked> A-Z</label>
+          <label><input type="checkbox" id="include-lowercase" checked> a-z</label>
+          <label><input type="checkbox" id="include-numbers" checked> 0-9</label>
+          <label><input type="checkbox" id="include-symbols" checked> !@#$%</label>
+          <button onclick="generatePassword()" data-i18n="dev.generate">Generuj hasło</button>
+          <button onclick="copyPassword()" data-i18n="dev.copy">Kopiuj</button>
+          <div id="password-output" class="output"></div>
+        </div>
+      </div>
+
+      <div class="tool-section">
+        <h2 data-i18n="dev.dateCalculator">Kalkulator dat</h2>
+        <label for="date-start" data-i18n="dev.dateFrom">Data początkowa:</label>
+        <input type="date" id="date-start">
+        <label for="date-end" data-i18n="dev.dateTo">Data końcowa:</label>
+        <input type="date" id="date-end">
+        <button onclick="calculateDateDiff()" data-i18n="dev.calculate">Oblicz</button>
+        <div id="date-diff-result" class="output"></div>
+      </div>
+
+      <div class="tool-section">
+        <h2 data-i18n="dev.dataConverter">Konwerter danych</h2>
+        <label for="value" data-i18n="dev.value">Wartość:</label>
+        <input type="number" id="data-value" placeholder="0" />
+        
+        <label for="unit-from" data-i18n="dev.from">Z:</label>
+        <select id="unit-from">
+          <option value="B">B</option>
+          <option value="KB">KB</option>
+          <option value="MB" selected>MB</option>
+          <option value="GB">GB</option>
+          <option value="TB">TB</option>
+        </select>
+
+        <label for="unit-to" data-i18n="dev.to">Na:</label>
+        <select id="unit-to">
+          <option value="B">B</option>
+          <option value="KB">KB</option>
+          <option value="MB">MB</option>
+          <option value="GB" selected>GB</option>
+          <option value="TB">TB</option>
+        </select>
+
+        <button onclick="convertData()" data-i18n="dev.convert">Konwertuj</button>
+        <div id="converter-output" class="output"></div>
+      </div>
+
+    </section>
+
+    <section id="bio">
+      <h1 data-i18n="bio.title">O mnie</h1>
+      <!-- <p data-i18n="bio.desc">Tu pojawi się krótka biografia.</p> -->
+    </section>
+
+    <section id="cv">
+      <h1 data-i18n="cv.title">CV</h1>
+      <!-- <p data-i18n="cv.desc">Tutaj będzie wersja HTML i link do PDF.</p> -->
+    </section>
+
+    <section id="projekty">
+      <h1 data-i18n="projects.title">Projekty</h1>
+      <!-- <p data-i18n="projects.desc">Przykładowe większe aplikacje i programy.</p> -->
+    </section>
+
+    <section id="kontakt">
+      <h1 data-i18n="contact.title">Kontakt</h1>
+      <!-- <p data-i18n="contact.desc">Formularz lub dane kontaktowe pojawią się tutaj.</p> -->
+    </section>
+  </main>
+
+  <script src="lang/translations.js"></script>
+  <script src="js/passwordGenerator.js"></script>
+  <script src="js/dateCalculator.js"></script>
+  <script src="js/dataConverter.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
