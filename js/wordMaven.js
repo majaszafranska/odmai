@@ -38,10 +38,10 @@ async function searchSynonyms() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
-    const synonimy = Array.from(doc.querySelectorAll("#mall ul li a")).map(el => el.textContent.trim());
+    const synonyms = Array.from(doc.querySelectorAll("#mall ul li a")).map(el => el.textContent.trim());
 
-    if (synonimy.length > 0) {
-      showResult(`<strong>Synonimy słowa: ${word}</strong><br>` + synonimy.join(", "));
+    if (synonyms.length > 0) {
+      showResult(`<strong>Synonimy słowa: ${word}</strong><br>` + synonyms.join(", "));
     } else {
       showResult("❌ Brak synonimów dla tego słowa.");
     }
@@ -57,32 +57,31 @@ async function searchAntonyms() {
   showLoading("Antonimy");
 
   try {
-    const url = `/php/proxy-synonimy.php?q=${encodeURIComponent(word)}&type=antonimy`;
-    const res = await fetch(url);
+    const proxy = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://antonim.net/antonim/${encodeURIComponent(word)}`;
+    const res = await fetch(proxy + url, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    });
     const html = await res.text();
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
-    const antonymSection = [...doc.querySelectorAll("h2, h3")].find(h =>
-      h.textContent.toLowerCase().includes("antonimy")
-    );
 
-    let listItems = [];
-
-    if (antonymSection) {
-      const nextUL = antonymSection.nextElementSibling;
-      if (nextUL && nextUL.tagName === "UL") {
-        listItems = [...nextUL.querySelectorAll("li")].map(li => li.textContent.trim());
+    const mall = doc.querySelector("#mall");
+    if (mall) {
+      const antonyms = [...mall.querySelectorAll("ul li a")].map(a => a.textContent.trim());
+      if (antonyms.length > 0) {
+        showResult(`<strong>Antonimy słowa: ${word}</strong><br>` + antonyms.join(", "));
+      } else {
+        showResult("❌ Brak antonimów dla tego słowa.");
       }
-    }
-
-    if (listItems.length > 0) {
-      showResult(`<strong>Antonimy słowa "${word}":</strong><br>${listItems.join(", ")}`);
     } else {
-      showResult("❌ Brak antonimów dla tego słowa.");
+      showResult("❌ Nie znaleziono sekcji antonimów.");
     }
   } catch {
-    showResult("⚠️ Błąd podczas pobierania antonimów.");
+    showResult("⚠️ Błąd podczas pobierania antonimów (możliwe ograniczenie CORS).");
   }
 }
 
