@@ -121,9 +121,8 @@ async function searchDeclension() {
               output.appendChild(tableEl);
           });
 
-      } catch (e) {
+      } catch () {
           showResult("⚠️ Błąd podczas pobierania odmiany.");
-          console.error(e);
       }
 }
 
