@@ -26,21 +26,23 @@ async function searchSynonyms() {
   showLoading("Synonimy");
 
   try {
-    const url = `/php/proxy-synonimy.php?q=${encodeURIComponent(word)}`;
-    const res = await fetch(url);
+    const proxy = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://synonim.net/s/${encodeURIComponent(word)}`;
+    const res = await fetch(proxy + url);
     const html = await res.text();
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
-    const listItems = [...doc.querySelectorAll("li")].map(li => li.textContent.trim());
 
-    if (listItems.length > 0) {
-      showResult(`<strong>Synonimy słowa "${word}":</strong><br>${listItems.join(", ")}`);
+    const list = doc.querySelector(".list");
+    if (list) {
+      const items = [...list.querySelectorAll("li")].map(li => li.textContent.trim());
+      showResult(`<strong>Synonimy słowa: ${word}</strong><br>` + items.join(", "));
     } else {
       showResult("❌ Brak synonimów dla tego słowa.");
     }
   } catch {
-    showResult("⚠️ Błąd podczas pobierania synonimów.");
+    showResult("⚠️ Błąd podczas pobierania synonimów (możliwe ograniczenie CORS).");
   }
 }
 
