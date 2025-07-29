@@ -87,22 +87,44 @@ async function searchDeclension() {
   showLoading("Odmiana");
 
   try {
-    const url = `/php/proxy-odmiana.php?q=${encodeURIComponent(word)}`;
-    const res = await fetch(url);
-    const html = await res.text();
+          const res = await fetch(`/php/proxy-odmiana.php?q=${encodeURIComponent(word)}`);
+          const data = await res.json();
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+          if (data.error) {
+              output.innerHTML = `<p>${data.error}</p>`;
+              return;
+          }
 
-    const table = doc.querySelector(".wikitable");
-    if (table) {
-      showResult(`<strong>Odmiana słowa "${word}":</strong><br><br>` + table.outerHTML);
-    } else {
-      showResult("❌ Nie znaleziono tabeli odmiany.");
-    }
-  } catch {
-    showResult("⚠️ Błąd podczas pobierania odmiany.");
-  }
+          if (!data.tables || data.tables.length === 0) {
+              showResult("❌ Nie znaleziono tabeli odmiany.");
+              return;
+          }
+
+          output.innerHTML = ""; // czyść
+
+          data.tables.forEach(table => {
+              const tableEl = document.createElement("table");
+              tableEl.classList.add("slownik-tabela");
+
+              const tbody = document.createElement("tbody");
+              table.forEach(row => {
+                  const tr = document.createElement("tr");
+                  row.forEach((cell, i) => {
+                      const el = document.createElement(i === 0 ? "th" : "td");
+                      el.textContent = cell;
+                      tr.appendChild(el);
+                  });
+                  tbody.appendChild(tr);
+              });
+
+              tableEl.appendChild(tbody);
+              output.appendChild(tableEl);
+          });
+
+      } catch (e) {
+          showResult("⚠️ Błąd podczas pobierania odmiany.");
+          console.error(e);
+      }
 }
 
 function getWord() {
