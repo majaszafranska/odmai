@@ -83,6 +83,17 @@
         <div id="converter-output" class="output"></div>
       </div>
 
+      <div class="tool-section">
+        <h2 data-i18n="dev.wordMaven">Znawca słów</h2>
+        <label for="value" data-i18n="dev.word">Słowo:</label>
+        <input type="text" id="data-word" placeholder="słowo" />
+        <button onclick="searchMeaning()" data-i18n="dev.meaning">Znaczenie</button>
+        <button onclick="searchSynonyms()" data-i18n="dev.synonyms">Synonimy</button>
+        <button onclick="searchAntonyms()" data-i18n="dev.antonyms">Antonimy</button>
+        <button onclick="searchDeclension()" data-i18n="dev.declension">Odmiana</button>
+        <div id="wordMaven-result" class="output"></div>
+      </div>
+
     </section>
 
     <section id="bio">
@@ -110,6 +121,7 @@
   <script src="js/passwordGenerator.js"></script>
   <script src="js/dateCalculator.js"></script>
   <script src="js/dataConverter.js"></script>
+  <script src="js/wordMaven.js"></script>
   <script src="js/main.js"></script>
 
 </body>
