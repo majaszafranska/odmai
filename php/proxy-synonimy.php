@@ -16,6 +16,8 @@ $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_REFERER, "https://synonim.net/");
 curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] ?? "Mozilla/5.0");
+curl_setopt($ch, CURLOPT_COOKIEJAR, '/tmp/cookie.txt');
+curl_setopt($ch, CURLOPT_COOKIEFILE, '/tmp/cookie.txt');
 
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
