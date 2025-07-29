@@ -122,7 +122,7 @@ async function searchDeclension() {
             output.appendChild(tableEl);
         });
 
-    } catch () {
+    } catch {
         output.innerHTML = "<p>Wystąpił błąd podczas pobierania odmiany.</p>";
     }
 }
