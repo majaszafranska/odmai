@@ -84,47 +84,27 @@ async function searchDeclension() {
   const word = getWord();
   if (!word) return;
 
-    const output = document.getElementById("wordMaven-result");
-    output.innerHTML = "<p>Trwa pobieranie odmiany...</p>";
+  showLoading("Odmiana");
 
-    try {
-        const res = await fetch(`/php/proxy-odmiana.php?q=${encodeURIComponent(word)}`);
-        const data = await res.json();
+  try {
+    const proxy = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://pl.wiktionary.org/wiki/${encodeURIComponent(word)}`;
+    const res = await fetch(proxy + url);
+    const html = await res.text();
 
-        if (data.error) {
-            output.innerHTML = `<p>${data.error}</p>`;
-            return;
-        }
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
 
-        if (!data.tables || data.tables.length === 0) {
-            output.innerHTML = "<p>Nie znaleziono tabeli odmiany.</p>";
-            return;
-        }
+    const table = doc.querySelector(".wikitable");
 
-        output.innerHTML = ""; // czyść
-
-        data.tables.forEach(table => {
-            const tableEl = document.createElement("table");
-            tableEl.classList.add("slownik-tabela");
-
-            const tbody = document.createElement("tbody");
-            table.forEach(row => {
-                const tr = document.createElement("tr");
-                row.forEach((cell, i) => {
-                    const el = document.createElement(i === 0 ? "th" : "td");
-                    el.textContent = cell;
-                    tr.appendChild(el);
-                });
-                tbody.appendChild(tr);
-            });
-
-            tableEl.appendChild(tbody);
-            output.appendChild(tableEl);
-        });
-
-    } catch {
-        output.innerHTML = "<p>Wystąpił błąd podczas pobierania odmiany.</p>";
+    if (table) {
+      showResult(table.outerHTML);
+    } else {
+      showResult("❌ Nie znaleziono tabeli odmiany.");
     }
+  } catch {    
+    showResult("⚠️ Błąd podczas pobierania odmiany (możliwe ograniczenie dostępu CORS).");
+  }
 }
 
 function getWord() {
