@@ -28,7 +28,11 @@ async function searchSynonyms() {
   try {
     const proxy = "https://cors-anywhere.herokuapp.com/";
     const url = `https://synonim.net/s/${encodeURIComponent(word)}`;
-    const res = await fetch(proxy + url);
+    const res = await fetch(proxy + url, {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest"
+          }
+        });
     const html = await res.text();
 
     const parser = new DOMParser();
