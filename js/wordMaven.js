@@ -38,10 +38,10 @@ async function searchSynonyms() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
-    const list = doc.querySelector(".list");
-    if (list) {
-      const items = [...list.querySelectorAll("li")].map(li => li.textContent.trim());
-      showResult(`<strong>Synonimy słowa: ${word}</strong><br>` + items.join(", "));
+    const synonimy = Array.from(doc.querySelectorAll("#mall ul li a")).map(el => el.textContent.trim());
+
+    if (synonimy.length > 0) {
+      showResult(`<strong>Synonimy słowa: ${word}</strong><br>` + synonimy.join(", "));
     } else {
       showResult("❌ Brak synonimów dla tego słowa.");
     }
