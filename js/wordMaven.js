@@ -84,46 +84,48 @@ async function searchDeclension() {
   const word = getWord();
   if (!word) return;
 
-  showLoading("Odmiana");
+    const output = document.getElementById("wordMaven-result");
+    output.innerHTML = "<p>Trwa pobieranie odmiany...</p>";
 
-  try {
-          const res = await fetch(`/php/proxy-odmiana.php?q=${encodeURIComponent(word)}`);
-          const data = await res.json();
+    try {
+        const res = await fetch(`/php/proxy-odmiana.php?q=${encodeURIComponent(word)}`);
+        const data = await res.json();
 
-          if (data.error) {
-              output.innerHTML = `<p>${data.error}</p>`;
-              return;
-          }
+        if (data.error) {
+            output.innerHTML = `<p>${data.error}</p>`;
+            return;
+        }
 
-          if (!data.tables || data.tables.length === 0) {
-              showResult("❌ Nie znaleziono tabeli odmiany.");
-              return;
-          }
+        if (!data.tables || data.tables.length === 0) {
+            output.innerHTML = "<p>Nie znaleziono tabeli odmiany.</p>";
+            return;
+        }
 
-          output.innerHTML = ""; // czyść
+        output.innerHTML = ""; // czyść
 
-          data.tables.forEach(table => {
-              const tableEl = document.createElement("table");
-              tableEl.classList.add("slownik-tabela");
+        data.tables.forEach(table => {
+            const tableEl = document.createElement("table");
+            tableEl.classList.add("slownik-tabela");
 
-              const tbody = document.createElement("tbody");
-              table.forEach(row => {
-                  const tr = document.createElement("tr");
-                  row.forEach((cell, i) => {
-                      const el = document.createElement(i === 0 ? "th" : "td");
-                      el.textContent = cell;
-                      tr.appendChild(el);
-                  });
-                  tbody.appendChild(tr);
-              });
+            const tbody = document.createElement("tbody");
+            table.forEach(row => {
+                const tr = document.createElement("tr");
+                row.forEach((cell, i) => {
+                    const el = document.createElement(i === 0 ? "th" : "td");
+                    el.textContent = cell;
+                    tr.appendChild(el);
+                });
+                tbody.appendChild(tr);
+            });
 
-              tableEl.appendChild(tbody);
-              output.appendChild(tableEl);
-          });
+            tableEl.appendChild(tbody);
+            output.appendChild(tableEl);
+        });
 
-      } catch () {
-          showResult("⚠️ Błąd podczas pobierania odmiany.");
-      }
+    } catch (e) {
+        output.innerHTML = "<p>Wystąpił błąd podczas pobierania odmiany.</p>";
+        console.error(e);
+    }
 }
 
 function getWord() {
