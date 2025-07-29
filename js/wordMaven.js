@@ -26,7 +26,7 @@ async function searchSynonyms() {
   showLoading("Synonimy");
 
   try {
-    const url = `/api/proxy-synonimy.php?q=${encodeURIComponent(word)}`;
+    const url = `/php/proxy-synonimy.php?q=${encodeURIComponent(word)}`;
     const res = await fetch(url);
     const html = await res.text();
 
@@ -51,7 +51,7 @@ async function searchAntonyms() {
   showLoading("Antonimy");
 
   try {
-    const url = `/api/proxy-synonimy.php?q=${encodeURIComponent(word)}&type=antonimy`;
+    const url = `/php/proxy-synonimy.php?q=${encodeURIComponent(word)}&type=antonimy`;
     const res = await fetch(url);
     const html = await res.text();
 
@@ -87,7 +87,7 @@ async function searchDeclension() {
   showLoading("Odmiana");
 
   try {
-    const url = `/api/proxy-odmiana.php?q=${encodeURIComponent(word)}`;
+    const url = `/php/proxy-odmiana.php?q=${encodeURIComponent(word)}`;
     const res = await fetch(url);
     const html = await res.text();
 
