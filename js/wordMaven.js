@@ -103,7 +103,7 @@ async function searchDeclension() {
     const table = doc.querySelector(".wikitable");
 
     if (table) {
-      showResult(table.outerHTML);
+      showResult(`<strong>Odmiana słowa: ${word}</strong><br>` + table.outerHTML);
     } else {
       showResult("❌ Nie znaleziono tabeli odmiany.");
     }
